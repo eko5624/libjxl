@@ -1,0 +1,86 @@
+name: build
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: windows-2022
+    steps:
+    - name: Checkout the source
+      uses: actions/checkout@v3
+      with:
+        repository: "libjxl/libjxl"
+        submodules: true
+        fetch-depth: 2
+
+    - name: Install libraries with vcpkg
+      shell: 'bash'
+      run: |
+        set -x
+        vcpkg install gflags:x64-windows-static
+        vcpkg install giflib:x64-windows-static
+        vcpkg install libjpeg-turbo:x64-windows-static
+        vcpkg install libpng:x64-windows-static
+        vcpkg install libwebp:x64-windows-static
+    - name: Configure
+      shell: 'bash'
+      run: |
+        set -x
+        mkdir build
+        cmake -Bbuild -H. -A x64 \
+          -DBUILD_TESTING=OFF \
+          -DCMAKE_BUILD_TYPE=Release \
+          -DCMAKE_INSTALL_PREFIX=`pwd`/prefix \
+          -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake \
+          -DJPEGXL_ENABLE_OPENEXR=OFF \
+          -DJPEGXL_ENABLE_PLUGINS=OFF \
+          -DJPEGXL_ENABLE_TCMALLOC=OFF \
+          -DJPEGXL_ENABLE_VIEWERS=OFF \
+          -DVCPKG_TARGET_TRIPLET=x64-windows-static \
+          -DJPEGXL_BUNDLE_GFLAGS=ON \
+          
+    - name: Build
+      shell: 'bash'
+      run: |
+        set -x
+        cmake --build build --config Release
+    - name: Install
+      shell: 'bash'
+      run: |
+        set -x
+        cmake --build build --config Release --target install
+        for pkg in giflib libjpeg-turbo libpng libwebp zlib; do
+          cp C:/vcpkg/installed/x64-windows-static/share/${pkg}/copyright \
+            prefix/bin/LICENSE.${pkg}
+        done
+        cp third_party/sjpeg/COPYING prefix/bin/LICENSE.sjpeg
+        cp third_party/skcms/LICENSE prefix/bin/LICENSE.skcms
+        cp third_party/highway/LICENSE prefix/bin/LICENSE.highway
+        cp third_party/brotli/LICENSE prefix/bin/LICENSE.brotli
+        cp LICENSE prefix/bin/LICENSE.libjxl        
+    
+    - name: Get current timestamp      
+      id: timestamp
+      run: echo "::set-output name=date::$(date +%Y-%m-%d)"  
+ 
+    - name: Upload artifacts
+      uses: actions/upload-artifact@v2
+      with:
+        name: jxl-dev
+        path: |
+          prefix/*
+ 
+    - name: Package release zip
+      shell: 'powershell'
+      run: |
+        7z a jxl-dev.7z prefix/*
+   
+    - name: Upload
+      uses: svenstaro/upload-release-action@v2
+      with:
+        repo_token: ${{ secrets.GITHUB_TOKEN }}
+        file: jxl*.7z
+        tag: ${{ steps.timestamp.outputs.date }}
+        overwrite: true
+        file_glob: true
+       
