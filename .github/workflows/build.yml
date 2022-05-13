@@ -60,7 +60,7 @@ jobs:
         cp third_party/brotli/LICENSE prefix/bin/LICENSE.brotli
         cp LICENSE prefix/bin/LICENSE.libjxl     
         
-        cp C:/vcpkg/installed/x64-windows-static/include/brotli prefix/include
+        cp -r C:/vcpkg/installed/x64-windows-static/include/brotli prefix/include
         cp C:/vcpkg/installed/x64-windows-static/lib/brotli*.lib prefix/lib
         cp C:/vcpkg/installed/x64-windows-static/lib/pkgconfig/libbrotli*.pc prefix/lib/pkgconfig
     
