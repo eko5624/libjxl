@@ -17,6 +17,7 @@ jobs:
       shell: 'bash'
       run: |
         set -x
+        vcpkg install brotli:x64-windows-static
         vcpkg install gflags:x64-windows-static
         vcpkg install giflib:x64-windows-static
         vcpkg install libjpeg-turbo:x64-windows-static
