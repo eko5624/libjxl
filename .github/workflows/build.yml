@@ -36,11 +36,11 @@ jobs:
           -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake \
           -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
           -DBUILD_SHARED_LIBS=OFF \
+          -DJPEGXL_STATIC=ON \
           -DJPEGXL_ENABLE_OPENEXR=OFF \
           -DJPEGXL_ENABLE_PLUGINS=OFF \
           -DJPEGXL_ENABLE_TCMALLOC=OFF \
           -DJPEGXL_ENABLE_VIEWERS=OFF \
-          -DVCPKG_TARGET_TRIPLET=x64-windows-static \
           -DJPEGXL_BUNDLE_GFLAGS=ON \
         #
           
