@@ -18,6 +18,7 @@ jobs:
           mingw-w64-x86_64-giflib
           mingw-w64-x86_64-libjpeg-turbo
           mingw-w64-x86_64-libpng
+          mingw-w64-x86_64-gflags         
           ninja
 #          mingw-w64-x86_64-brotli | -DJPEGXL_FORCE_SYSTEM_BROTLI=ON
 #          mingw-w64-x86_64-graphviz
