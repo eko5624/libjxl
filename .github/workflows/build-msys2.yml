@@ -1,4 +1,4 @@
-name: build-clang
+name: build-msys2
 on:
   workflow_dispatch:
 
