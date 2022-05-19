@@ -5,15 +5,13 @@ on:
 jobs:
   build:
     runs-on: windows-latest
-
     steps:
     - uses: msys2/setup-msys2@v2
       with:
-        update: true
         install: >-
-          cmake
-          doxygen
           git
+          mingw-w64-x86_64-doxygen
+          mingw-w64-x86_64-cmake
           mingw-w64-x86_64-clang
           mingw-w64-x86_64-giflib
           mingw-w64-x86_64-libjpeg-turbo
