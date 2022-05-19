@@ -29,16 +29,14 @@ jobs:
         export CC=clang CXX=clang++
         mkdir build
         cmake -Bbuild -H. -A x64 \
-          -DBUILD_TESTING=OFF \
           -DCMAKE_BUILD_TYPE=Release \
           -DCMAKE_INSTALL_PREFIX=`pwd`/prefix \
           -DCMAKE_TOOLCHAIN_FILE=C:/vcpkg/scripts/buildsystems/vcpkg.cmake \
           -DCMAKE_POSITION_INDEPENDENT_CODE=ON \
+          -DJPEGXL_STATIC=ON \
           -DBUILD_SHARED_LIBS=OFF \
           -DBUILD_GMOCK=OFF \
           -Dgtest_force_shared_crt=ON \
-          -DJPEGXL_STATIC=ON \
-          -DVCPKG_TARGET_TRIPLET=x64-windows-static
           -DJPEGXL_ENABLE_TCMALLOC=OFF \          
           -DJPEGXL_ENABLE_FUZZERS=OFF \
           -DJPEGXL_ENABLE_VIEWERS=OFF -G Ninja
