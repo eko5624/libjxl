@@ -216,13 +216,6 @@ set_target_properties(jxl_dec PROPERTIES
   VERSION ${JPEGXL_LIBRARY_VERSION}
   SOVERSION ${JPEGXL_LIBRARY_SOVERSION})
 
-# Check whether the linker support excluding libs
-set(LINKER_EXCLUDE_LIBS_FLAG "-Wl,--exclude-libs=ALL")
-include(CheckCSourceCompiles)
-list(APPEND CMAKE_EXE_LINKER_FLAGS ${LINKER_EXCLUDE_LIBS_FLAG})
-check_c_source_compiles("int main(){return 0;}" LINKER_SUPPORT_EXCLUDE_LIBS)
-list(REMOVE_ITEM CMAKE_EXE_LINKER_FLAGS ${LINKER_EXCLUDE_LIBS_FLAG})
-
 if(NOT BUILD_SHARED_LIBS)
   target_compile_definitions(jxl PUBLIC -DJXL_STATIC_DEFINE)
   target_compile_definitions(jxl_dec PUBLIC -DJXL_STATIC_DEFINE)
@@ -246,11 +239,6 @@ foreach(target IN ITEMS jxl jxl_dec)
   # This hides the default visibility symbols from static libraries bundled into
   # the shared library. In particular this prevents exposing symbols from hwy
   # and skcms in the shared library.
-  if(LINKER_SUPPORT_EXCLUDE_LIBS)
-    set_property(TARGET ${target} APPEND_STRING PROPERTY
-        LINK_FLAGS " ${LINKER_EXCLUDE_LIBS_FLAG}")
-  endif()
-endforeach()
 
 # Only install libjxl public library. The libjxl_dec is not installed since it
 # contains symbols also in libjxl which would conflict if programs try to use
